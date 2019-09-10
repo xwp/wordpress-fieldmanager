@@ -14,6 +14,8 @@
     "qunit": "^2.9"
   },
   "scripts": {
-    "test": "grunt qunit:specific"
+    "test": "grunt qunit:latest",
+    "test:recent": "grunt qunit:recent",
+    "test:specific": "grunt qunit:specific"
   }
 }
