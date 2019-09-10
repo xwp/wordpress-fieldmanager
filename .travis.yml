@@ -22,7 +22,7 @@ matrix:
       addons:
         apt:
           packages:
-            - libnss3
+            - libatk-bridge2.0-0
       before_install:
         - nvm install 8
         - rm composer.lock # Since we're on a super old version of PHP
