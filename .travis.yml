@@ -29,7 +29,10 @@ branches:
     - master
     - dev
 
-before_script:
+install:
+  - npm install
+  - composer install
+
   # Turn off Xdebug. See https://core.trac.wordpress.org/changeset/40138.
   - phpenv config-rm xdebug.ini || echo "Xdebug not available"
   - export OG_DIR="$(pwd)"
@@ -52,14 +55,6 @@ before_script:
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
       bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-      npm install
-    fi
-  - |
-    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      npm install
-      # Composer Install
-      travis_retry composer install
-      export PATH=$PATH:`pwd`/vendor/bin/
     fi
 
   - phpenv rehash
@@ -72,6 +67,7 @@ before_script:
 
 script:
   - find . -path ./vendor -prune -o -type "f" -iname "*.php" | xargs -L "1" php -l
+  - composer lint
   # Run plugin phpunit tests for both single and multisite.
   - |
     if [[ ! -z "$WP_VERSION" ]] ; then
