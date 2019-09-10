@@ -1,91 +1,67 @@
-language: php
+dist: bionic
+
+language:
+  - php
+  - node_js
+
+node_js:
+  - node
+
+services:
+  - mysql
+
+env:
+  global:
+    - WP_VERSION=latest
 
 matrix:
   include:
     - php: 5.3
-      env: WP_VERSION=4.7.6
+      env: WP_VERSION=5.1.2
       dist: precise
-    - php: 5.3
-      env: WP_VERSION=latest
-      dist: precise
+      addons:
+        apt:
+          packages:
+            - libatk-bridge2.0-0
+      before_install:
+        - nvm install 8
+        - rm composer.lock # Since we're on a super old version of PHP
     - php: 5.6
-      env: WP_VERSION=latest
-    - php: 5.6
-      env: WP_TRAVISCI=phpcs
+      dist: xenial
+      before_install:
+        - rm composer.lock
     - php: 7.0
-      env: WP_VERSION=latest
-    - php: 7.0
-      env: WP_VERSION=nightly
+      dist: xenial
+      before_install:
+        - rm composer.lock
     - php: 7.1
-      env: WP_VERSION=latest
     - php: 7.2
-      env: WP_VERSION=latest
+    - php: 7.2
+      env: WP_VERSION=nightly
+    - php: 7.3
   fast_finish: true
-  allow_failures:
-    - php: 7.2
 
 branches:
   only:
     - master
     - dev
 
-before_script:
-  # Turn off Xdebug. See https://core.trac.wordpress.org/changeset/40138.
-  - phpenv config-rm xdebug.ini || echo "Xdebug not available"
-  - export OG_DIR="$(pwd)"
-
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-
-  # Couple the PHPUnit version to the PHP version.
-  - |
-    case "$TRAVIS_PHP_VERSION" in
-      7.*)
-        echo "Using PHPUnit 6.1"
-        composer global require "phpunit/phpunit=6.1.*"
-        ;;
-      *)
-        echo "Using PHPUnit 4.8"
-        composer global require "phpunit/phpunit=4.8.*"
-        ;;
-    esac
-
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-      npm install
-    fi
-  - |
-    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      npm install
-      # Composer Install
-      travis_retry composer install
-      export PATH=$PATH:`pwd`/vendor/bin/
-    fi
-
-  - phpenv rehash
-
-  # For debugging.
-  - pwd
-  - which phpunit
-  - phpunit --version
-  - echo $PATH
+install:
+  - npm install
+  - composer install
+  - bash bin/install-wp-tests.sh wordpress_test root '' localhost "$WP_VERSION"
 
 script:
   - find . -path ./vendor -prune -o -type "f" -iname "*.php" | xargs -L "1" php -l
-  # Run plugin phpunit tests for both single and multisite.
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      phpunit --version
-      phpunit
-      phpunit -c multisite.xml
-    fi
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      cd $OG_DIR
-      grunt qunit:specific --wp=$WP_VERSION
-    fi
-  - |
-    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      cd $OG_DIR
-      grunt phpcs
-    fi
+  - composer lint
+  - composer test
+  - composer test-multisite
+  - npm test -- --wp="$WP_VERSION"
+
+cache:
+  npm: true
+  directories:
+    - $HOME/.composer/cache
+
+notifications:
+  email: false

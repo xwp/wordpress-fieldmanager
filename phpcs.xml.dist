@@ -2,6 +2,9 @@
 <ruleset name="Fieldmanager">
 	<description>Sniffs for the coding standards of the Fieldmanager plugin</description>
 
+	<config name="installed_paths" value="vendor/wp-coding-standards/wpcs" />
+	<config name="ignore_warnings_on_exit" value="1" />
+
 	<file>fieldmanager.php</file>
 	<file>php/</file>
 	<file>templates/</file>

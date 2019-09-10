@@ -1,7 +1,12 @@
 {
   "name": "alleyinteractive/wordpress-fieldmanager",
+  "description": "Fieldmanager is a comprehensive toolkit for building forms, metaboxes, and custom admin screens for WordPress.",
   "type": "wordpress-plugin",
-  "keywords": ["wordpress", "plugin"],
+  "license": "GPL-2.0-only",
+  "keywords": [
+    "wordpress",
+    "plugin"
+  ],
   "authors": [
     {
       "name": "Alley Interactive",
@@ -12,11 +17,23 @@
     "composer/installers": "~1.0"
   },
   "require-dev": {
-    "squizlabs/php_codesniffer": "2.*",
-    "wp-coding-standards/wpcs": "^1"
+    "wp-coding-standards/wpcs": "^1",
+    "phpunit/phpunit": "^4 || ^6",
+    "apigen/apigen": ">=2.8"
   },
   "scripts": {
-    "post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs",
-    "post-update-cmd" : "\"vendor/bin/phpcs\" --config-set installed_paths vendor/wp-coding-standards/wpcs"
+    "lint": [
+      "composer validate",
+      "phpcs"
+    ],
+    "test": [
+      "phpunit"
+    ],
+    "test-multisite": [
+      "phpunit --config multisite.xml"
+    ],
+    "docs": [
+      "apigen -c apigen.neon --debug"
+    ]
   }
 }

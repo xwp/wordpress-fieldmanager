@@ -1,6 +1,8 @@
 tests/php/build
 tests/php/wp-unit-test
 
+/phpcs.xml
+
 # Silly Macs
 .DS_Store
 
@@ -20,7 +22,6 @@ todo.txt
 
 .svn
 
-composer.lock
 /vendor/
 /node_modules
 .idea/
