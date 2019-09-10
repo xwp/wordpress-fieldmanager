@@ -340,7 +340,7 @@ function fm_calculate_context() {
 					break;
 				// Context = "term".
 				case 'edit-tags.php':
-				case 'term.php': // As of 4.5-alpha; see https://core.trac.wordpress.org/changeset/36308
+				case 'term.php': // As of 4.5-alpha; see https://core.trac.wordpress.org/changeset/36308.
 					if ( ! empty( $_POST['taxonomy'] ) ) { // WPCS: input var okay. CSRF ok.
 						$calculated_context = array( 'term', sanitize_text_field( wp_unslash( $_POST['taxonomy'] ) ) ); // WPCS: input var okay. CSRF ok.
 					} elseif ( ! empty( $_GET['taxonomy'] ) ) { // WPCS: input var okay.
