@@ -47,3 +47,11 @@ script:
   - composer test
   - composer test-multisite
   - npm test -- --wp="$WP_VERSION"
+
+cache:
+  npm: true
+  directories:
+    - $HOME/.composer/cache
+
+notifications:
+  email: false
