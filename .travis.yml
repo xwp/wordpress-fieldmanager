@@ -18,7 +18,7 @@ matrix:
   include:
     - php: 5.3
       env: WP_VERSION=5.1.2
-      dist: trusty
+      dist: precise
       addons:
         apt:
           packages:
