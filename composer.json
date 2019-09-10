@@ -33,7 +33,7 @@
       "phpunit --config multisite.xml"
     ],
     "docs": [
-      "apigen -c apigen.neon"
+      "apigen -c apigen.neon --debug"
     ]
   }
 }
