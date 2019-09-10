@@ -30,7 +30,7 @@ Development of Fieldmanager happens on [Github](http://github.com/alleyinteracti
 To build Fieldmanager's API documentation, the latest version of which is available at [api.fieldmanager.org](http://api.fieldmanager.org), you need [apigen](http://apigen.org/) installed. Once you've got that, you can generate the entire documentation tree as follows:
 
 ```bash
-apigen -c apigen.neon
+composer docs
 ```
 
 ## Running QUnit tests

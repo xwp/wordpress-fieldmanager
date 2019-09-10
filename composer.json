@@ -18,7 +18,8 @@
   },
   "require-dev": {
     "wp-coding-standards/wpcs": "^1",
-    "phpunit/phpunit": "^4 || ^6"
+    "phpunit/phpunit": "^4 || ^6",
+    "apigen/apigen": "^4.1"
   },
   "scripts": {
     "lint": [
@@ -30,6 +31,9 @@
     ],
     "test-multisite": [
       "phpunit --config multisite.xml"
+    ],
+    "docs": [
+      "apigen -c apigen.neon"
     ]
   }
 }
