@@ -1,5 +1,9 @@
 language: php
 
+env:
+  global:
+	- WP_VERSION=latest
+
 matrix:
   include:
     - php: 5.3
@@ -35,53 +39,13 @@ install:
 
   # Turn off Xdebug. See https://core.trac.wordpress.org/changeset/40138.
   - phpenv config-rm xdebug.ini || echo "Xdebug not available"
-  - export OG_DIR="$(pwd)"
-
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-
-  # Couple the PHPUnit version to the PHP version.
-  - |
-    case "$TRAVIS_PHP_VERSION" in
-      7.*)
-        echo "Using PHPUnit 6.1"
-        composer global require "phpunit/phpunit=6.1.*"
-        ;;
-      *)
-        echo "Using PHPUnit 4.8"
-        composer global require "phpunit/phpunit=4.8.*"
-        ;;
-    esac
-
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-    fi
-
   - phpenv rehash
 
-  # For debugging.
-  - pwd
-  - which phpunit
-  - phpunit --version
-  - echo $PATH
+  - bash bin/install-wp-tests.sh wordpress_test root '' localhost "$WP_VERSION"
 
 script:
   - find . -path ./vendor -prune -o -type "f" -iname "*.php" | xargs -L "1" php -l
   - composer lint
-  # Run plugin phpunit tests for both single and multisite.
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      phpunit --version
-      phpunit
-      phpunit -c multisite.xml
-    fi
-  - |
-    if [[ ! -z "$WP_VERSION" ]] ; then
-      cd $OG_DIR
-      grunt qunit:specific --wp=$WP_VERSION
-    fi
-  - |
-    if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
-      cd $OG_DIR
-      grunt phpcs
-    fi
+  - composer test
+  - composer test-multisite
+  - npm test -- --wp="$WP_VERSION"
