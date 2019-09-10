@@ -19,7 +19,7 @@
   "require-dev": {
     "wp-coding-standards/wpcs": "^1",
     "phpunit/phpunit": "^4 || ^6",
-    "apigen/apigen": "^4.1"
+    "apigen/apigen": ">=2.8"
   },
   "scripts": {
     "lint": [
