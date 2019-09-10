@@ -1,6 +1,11 @@
+dist: bionic
+
 language:
   - php
   - node_js
+
+services:
+  - mysql
 
 env:
   global:
