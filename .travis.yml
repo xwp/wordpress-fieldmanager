@@ -2,7 +2,7 @@ language: php
 
 env:
   global:
-	- WP_VERSION=latest
+    - WP_VERSION=latest
 
 matrix:
   include:
